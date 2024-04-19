@@ -1,5 +1,11 @@
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
-import { arbitrumSepolia, gnosisChiado, morphSepolia, neonDevnet } from "viem/chains";
+import {
+  arbitrumSepolia,
+  filecoinCalibration,
+  gnosisChiado,
+  morphSepolia,
+  neonDevnet,
+} from "viem/chains";
 
 export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
 
@@ -12,7 +18,13 @@ const metadata = {
   icons: ["https://avatars.githubusercontent.com/u/37784886"],
 };
 
-const chains = [arbitrumSepolia, morphSepolia, neonDevnet, gnosisChiado] as const;
+const chains = [
+  arbitrumSepolia,
+  morphSepolia,
+  neonDevnet,
+  gnosisChiado,
+  filecoinCalibration,
+] as const;
 export const config = defaultWagmiConfig({
   chains,
   projectId,

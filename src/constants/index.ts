@@ -1,18 +1,18 @@
 const networks = [
   {
-    chain: "Arbitrum",
+    chain: "Arbitrum Sepolia",
     logo: "/logos/arbitrum.svg",
   },
   {
-    chain: "Gnosis",
+    chain: "Gnosis Chiado",
     logo: "/logos/gnosis.png",
   },
   {
-    chain: "Neon",
+    chain: "Neon EVM DevNet",
     logo: "/logos/neon.png",
   },
   {
-    chain: "Morph",
+    chain: "Morph Sepolia",
     logo: "/logos/morph.svg",
   },
 ];
@@ -28,4 +28,6 @@ const integrations = [
   },
 ];
 
-export { networks, integrations };
+import { CampaignData, Campaigns } from "./types";
+
+export { networks, integrations, type CampaignData, type Campaigns };
