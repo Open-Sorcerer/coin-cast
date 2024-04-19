@@ -37,7 +37,7 @@ const navSec1 = [
 
 const navSec2 = [
   {
-    link: "/nft",
+    link: "/launchpad",
     icon: <RiNftFill size={24} />,
     name: "Launchpad",
   },

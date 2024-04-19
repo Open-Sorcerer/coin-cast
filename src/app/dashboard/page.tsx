@@ -89,7 +89,7 @@ const Dashboard = () => {
         <div className="flex flex-col md:flex-row items-center space-y-4 md:space-x-4 md:space-y-0 md:items-start md:justify-start">
           <Card
             heading="CREATE A NFT MEMBERSHIPS"
-            link="/nft"
+            link="/launchpad"
             title="NFT COLLECTION"
             img="/images/nft.png"
             style="text-neutral-800"
