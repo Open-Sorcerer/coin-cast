@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
-  title: "Coin Cast",
+  title: "Coincast",
   description: "Token launchpad",
 };
 
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="bg-[#f5f5f5] dark:bg-[#060d30]">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
