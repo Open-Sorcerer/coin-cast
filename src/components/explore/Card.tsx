@@ -1,9 +1,9 @@
 "use client";
 /* eslint-disable @next/next/no-img-element -- To avoid img element warning */
-import { networks, type Campaigns } from "@/constants";
+import { launchPadNFTABI, networks, type Campaigns } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { parseEther } from "viem";
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
@@ -24,7 +24,7 @@ const Card = ({ name, price, image, nftAddress }: Campaigns) => {
       writeContract({
         account: address,
         address: nftAddress as `0x${string}`,
-        abi: ["NFT_ABI"],
+        abi: launchPadNFTABI,
         functionName: "nftMint",
         value: parseEther(price),
       });
@@ -39,7 +39,6 @@ const Card = ({ name, price, image, nftAddress }: Campaigns) => {
   };
 
   useEffect(() => {
-    console.log(chain?.name);
     chainLogo = networks.find((network) => network.chain === chain?.name)?.logo as string;
   }, [chain?.name]);
 
@@ -51,9 +50,8 @@ const Card = ({ name, price, image, nftAddress }: Campaigns) => {
           borderRadius: "10px",
         },
       });
-    } else if (status === "error") {
+    } else {
       setIsLoading(false);
-      console.log(error);
       toast.error("Something went wrong", {
         style: {
           borderRadius: "10px",
@@ -64,7 +62,7 @@ const Card = ({ name, price, image, nftAddress }: Campaigns) => {
 
   return (
     <div className="flex flex-col w-fit bg-[#141414] dark:bg-blue-700 bg-opacity-10 dark:bg-opacity-10 border border-neutral-300 dark:border-neutral-700 backdrop-filter backdrop-blur-sm rounded-xl shadow-md p-6">
-      <Image
+      <img
         src={image}
         alt={name}
         width={300}

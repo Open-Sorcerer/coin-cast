@@ -2,6 +2,7 @@ const networks = [
   {
     chain: "Arbitrum Sepolia",
     logo: "/logos/arbitrum.svg",
+    contract: "0x6633589236aa3cc786c113a9b24d77cfb2ebf0b1",
   },
   {
     chain: "Gnosis Chiado",
@@ -14,6 +15,11 @@ const networks = [
   {
     chain: "Morph Sepolia",
     logo: "/logos/morph.svg",
+  },
+  {
+    chain: "Filecoin Calibration",
+    logo: "/logos/filecoin.png",
+    contract: "0xA4CCEb9e84b9682ca559AA41DB57f4BECe586dc5",
   },
 ];
 
@@ -29,5 +35,6 @@ const integrations = [
 ];
 
 import { CampaignData, Campaigns } from "./types";
+import { launchPadABI, launchPadNFTABI } from "../../contracts/abi";
 
-export { networks, integrations, type CampaignData, type Campaigns };
+export { networks, integrations, launchPadABI, launchPadNFTABI, type CampaignData, type Campaigns };

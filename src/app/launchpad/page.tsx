@@ -6,6 +6,9 @@ import toast from "react-hot-toast";
 import { NFTStorage } from "nft.storage";
 import { Checkbox, Input, Layout, Upload } from "@/components";
 import { parseEther } from "viem";
+import { launchPadABI, networks } from "@/constants";
+
+let contractAddress: `0x${string}`;
 
 const NFTMembership = () => {
   const [imageUrl, setImageUrl] = useState("");
@@ -19,12 +22,17 @@ const NFTMembership = () => {
   const [isImageUploading, setIsImageUploading] = useState<boolean>(false);
   const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFT_STORAGE_TOKEN!;
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
-  const { address } = useAccount();
+  const { address, chain } = useAccount();
 
   const { data, writeContract, status, error } = useWriteContract();
   const { isSuccess, status: isValid } = useWaitForTransactionReceipt({
     hash: data,
   });
+
+  useEffect(() => {
+    contractAddress = networks.find((network) => network.chain === chain?.name)
+      ?.contract as `0x${string}`;
+  }, [chain?.name]);
 
   useEffect(() => {
     if (status === "success" && isSuccess && isValid === "success") {
@@ -34,7 +42,7 @@ const NFTMembership = () => {
           borderRadius: "10px",
         },
       });
-    } else if (status === "error") {
+    } else {
       setIsLoading(false);
       toast.error("Something went wrong", {
         style: {
@@ -51,17 +59,25 @@ const NFTMembership = () => {
       description: description,
       image: imageUrl,
     };
-
+    if (!contractAddress) {
+      toast.error("Please connect supported network", {
+        icon: "🚨",
+        style: {
+          borderRadius: "10px",
+        },
+      });
+      return;
+    }
     await client
       .storeDirectory([new File([JSON.stringify(metadata)], "metadata.json")])
       .then((cid) => {
         writeContract({
           account: address,
-          address: "0xLAUNCHPAD_ADDRESS",
-          abi: ["LAUNCHPAD_ABI"],
+          address: contractAddress,
+          abi: launchPadABI,
           functionName: "createNFT",
           args: [
-            `https://ipfs.moralis.io:2053/ipfs/${cid}`,
+            `https://${cid}.ipfs.nftstorage.link/metadata.json`,
             supply,
             maxSupplyFlag,
             parseEther(price.toString()),
@@ -107,7 +123,7 @@ const NFTMembership = () => {
                 setImage(image);
                 const file = e.target.files;
                 client.storeDirectory(file).then((cid) => {
-                  setImageUrl(`https://ipfs.moralis.io:2053/ipfs/${cid}`);
+                  setImageUrl(`https://${cid}.ipfs.nftstorage.link/${file[0].name}`);
                   setIsImageUploading(false);
                 });
               }}
@@ -174,7 +190,7 @@ const NFTMembership = () => {
                 return;
               }
               if (name && description && price && imageUrl) {
-                //   await handleCreateMembership();
+                await handleCreateMembership();
               } else {
                 toast("Please fill all the fields", {
                   icon: "🚧",

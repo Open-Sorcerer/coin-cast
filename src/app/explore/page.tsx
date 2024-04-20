@@ -1,63 +1,24 @@
 "use client";
 import { Card, Layout } from "@/components";
-import type { CampaignData, Campaigns } from "@/constants";
-import { NextPage } from "next";
+import { launchPadABI, networks, type CampaignData, type Campaigns } from "@/constants";
 import { useEffect, useState } from "react";
 import { formatEther } from "viem";
 import { useAccount, useReadContract } from "wagmi";
 
-const dummy = [
-  {
-    name: "NFT Membership",
-    description: "NFT Membership",
-    image: "/logos/metamask.jpeg",
-    price: "0.01",
-    nftAddress: "0xNFT_ADDRESS",
-  },
-  {
-    name: "NFT Membership",
-    description: "NFT Membership",
-    image: "/logos/metamask.jpeg",
-    price: "0.01",
-    nftAddress: "0xNFT_ADDRESS",
-  },
-  {
-    name: "NFT Membership",
-    description: "NFT Membership",
-    image: "/logos/metamask.jpeg",
-    price: "0.01",
-    nftAddress: "0xNFT_ADDRESS",
-  },
-  {
-    name: "NFT Membership",
-    description: "NFT Membership",
-    image: "/logos/metamask.jpeg",
-    price: "0.01",
-    nftAddress: "0xNFT_ADDRESS",
-  },
-  {
-    name: "NFT Membership",
-    description: "NFT Membership",
-    image: "/logos/metamask.jpeg",
-    price: "0.01",
-    nftAddress: "0xNFT_ADDRESS",
-  },
-  {
-    name: "NFT Membership",
-    description: "NFT Membership",
-    image: "/logos/metamask.jpeg",
-    price: "0.01",
-    nftAddress: "0xNFT_ADDRESS",
-  },
-];
+// let contractAddress: `0x${string}`;
 
-const Explore: NextPage = () => {
+const Explore = () => {
   const [campaigns, setCampaigns] = useState<Campaigns[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { address } = useAccount();
+  const { address, chain } = useAccount();
+  // useEffect(() => {
+  //   contractAddress = networks.find((network) => network.chain === chain?.name)
+  //     ?.contract as `0x${string}`;
+  // }, [chain?.name]);
+
   const { data, isFetched } = useReadContract({
-    address: "0xLAUNCHPAD_ADDRESS",
-    abi: ["LAUNCHPAD_ABI"],
+    address: "0x6633589236aa3cc786c113a9b24d77cfb2ebf0b1",
+    abi: launchPadABI,
     functionName: "getNFTsWithMetadataCreatedByCreator",
     args: [address],
   });
@@ -83,8 +44,7 @@ const Explore: NextPage = () => {
     if (data && isFetched) {
       fetchData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, isFetched]);
+  }, [data]);
 
   return (
     <Layout>
@@ -94,7 +54,7 @@ const Explore: NextPage = () => {
             Explore campaigns 🛰️
           </h1>
         </div>
-        {!isLoading ? (
+        {isLoading ? (
           <div className="flex flex-col mt-5 w-fit bg-[#141414] bg-opacity-20 dark:bg-opacity-60 backdrop-filter backdrop-blur-sm rounded-xl shadow-md p-6">
             <div className="animate-pulse flex flex-col space-x-4">
               <div className="rounded-xl bg-sky-400/40 h-48 w-[12rem]"></div>
@@ -107,10 +67,10 @@ const Explore: NextPage = () => {
           </div>
         ) : (
           <div className="grid grid-flow-row grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 mt-8">
-            {dummy.length === 0 ? (
+            {campaigns.length === 0 ? (
               <p className="text-secondary text-lg">No active NFT memberships yet.</p>
             ) : (
-              dummy.map((data, index) => (
+              campaigns.map((data, index) => (
                 <Card
                   key={index}
                   name={data.name}
