@@ -20,13 +20,13 @@ By leveraging Farcaster's powerful distribution layer and its growing user base 
   - Arbitrum Sepolia: `0x6633589236aa3cc786c113a9b24d77cfb2ebf0b1`
   - Filecoin Calibration: `0xA4CCEb9e84b9682ca559AA41DB57f4BECe586dc5`
   - Neon Devnet: `0x039A8561E235cF960bfed66AAD74441E3594aBb4`
-  - Morph Testnet: `0xA4CCEb9e84b9682ca559AA41DB57f4BECe586dc5`
+  - Morph Sepolia: `0xA4CCEb9e84b9682ca559AA41DB57f4BECe586dc5`
 
 - **Farcaster Integration**: Coincast seamlessly integrates with Farcaster Frames, enabling creators to distribute their NFT collections directly through Farcaster's social network.
 
 This integration allows creators to leverage Farcaster's engaged community and viral distribution capabilities.
 
-- **Audience Growth**: With Farcaster's impressive user base of over 50,000 DAUs, Coincast provides creators with a unique opportunity to expand their reach and grow their audience on new blockchain networks.
+- **Sales Growth**: With Farcaster's impressive user base of over 50,000 DAUs, Coincast provides creators with a unique opportunity to expand their reach and grow their sales. There are multiple usecases: **NFT ticketing**, **E-commerce of digital assets**, **Token gated content**, **Distribute POAPS** and much more.
 
 By distributing their NFTs through Farcaster Frames, creators can tap into a highly engaged and enthusiastic community of collectors and fans.
 
