@@ -3,7 +3,10 @@
 import { Layout } from "@/components";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { createPublicClient, getContract, http } from "viem";
+import { arbitrumSepolia } from "viem/chains";
 import { useAccount } from "wagmi";
+import { launchPadNFTABI } from "../../../contracts/abi";
 
 const Product = ({ params }: { params: { address: `0x${string}` } }) => {
   const { address } = useAccount();
@@ -14,12 +17,36 @@ const Product = ({ params }: { params: { address: `0x${string}` } }) => {
   const [price, setPrice] = useState<number>(0.0005);
   const [image, setImage] = useState<string>("/logos/metamask.jpeg");
 
+  const publicClient = createPublicClient({
+    chain: arbitrumSepolia,
+    transport: http(),
+  });
+
   const getMetadata = async () => {
-    // const dripContract = getContract({
-    //   address: params.address[1] as `0x${string}`,
-    //   abi: DripsABI,
-    //   client: publicClient,
-    // });
+    const nftContract = getContract({
+      address: params.address[1] as `0x${string}`,
+      abi: launchPadNFTABI,
+      client: publicClient,
+    });
+
+    const contractUri = await nftContract.read.uri([0]);
+
+    const price = await nftContract.read.price([0]);
+
+    console.log("contractUri", contractUri);
+
+    const metadata = await fetch(contractUri as string);
+
+    const data = (await metadata.json()) as {
+      name: string;
+      description: string;
+      image: string;
+    };
+
+    setName(data.name);
+    setDescription(data.description);
+    setImage(data.image);
+    setPrice(Number(price));
   };
 
   useEffect(() => {

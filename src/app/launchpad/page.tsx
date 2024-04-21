@@ -24,7 +24,7 @@ const Launchpad = () => {
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
   const { address, chain } = useAccount();
 
-  const { data, writeContract, status, isError } = useWriteContract();
+  const { data, writeContractAsync, status, isError } = useWriteContract();
   const {
     isSuccess,
     status: isValid,
@@ -72,23 +72,26 @@ const Launchpad = () => {
       });
       return;
     }
-    await client
-      .storeDirectory([new File([JSON.stringify(metadata)], "metadata.json")])
-      .then((cid) => {
-        writeContract({
-          account: address,
-          address: contractAddress,
-          abi: launchPadABI,
-          functionName: "createNFT",
-          args: [
-            `https://${cid}.ipfs.nftstorage.link/metadata.json`,
-            supply,
-            maxSupplyFlag,
-            parseEther(price.toString()),
-            address,
-          ],
-        });
-      });
+    const apiResponse = await fetch("/api", {
+      method: "POST",
+      body: JSON.stringify(metadata),
+    });
+
+    const { hash } = await apiResponse.json();
+
+    await writeContractAsync({
+      account: address,
+      address: contractAddress,
+      abi: launchPadABI,
+      functionName: "createNFT",
+      args: [
+        `https://ipfs.moralis.io:2053/ipfs/${hash}`,
+        supply,
+        maxSupplyFlag,
+        parseEther(price.toString()),
+        address,
+      ],
+    });
   };
 
   return (
