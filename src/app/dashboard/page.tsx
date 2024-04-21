@@ -1,14 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import Head from "next/head";
 import { Layout } from "@/components";
 import Image from "next/image";
 import Link from "next/link";
 import { MdSpaceDashboard } from "react-icons/md";
 import { Table } from "@/components";
-// import { useAccount, useContractRead } from "wagmi";
-// import { xdcMainnetContractAddress } from "@/utils/constants";
-// import NFTContractFactory from "@/utils/ABI/NFTContractFactory.json";
+import { useAccount, useReadContract } from "wagmi";
+import { launchPadABI, networks } from "@/constants";
 
 type CardProps = {
   heading: string;
@@ -47,37 +45,37 @@ const Card = ({ heading, title, img, link, color, style }: CardProps) => {
 };
 
 const Dashboard = () => {
-  const [NFTAddresses, setNFTAddresses] = useState<string[]>([]);
+  const [NFTAddresses, setNFTAddresses] = useState<`0x${string}`[]>([]);
+  const [contractAddress, setContractAddress] = useState<`0x${string}`>();
+  const { address, chain } = useAccount();
 
-  //   const { address } = useAccount();
+  useEffect(() => {
+    const contract = networks.find((network) => network.chain === chain?.name)
+      ?.contract as `0x${string}`;
+    setContractAddress(contract);
+  }, [chain?.name]);
 
-  //   const { data, isError, isLoading } = useContractRead({
-  //     address: xdcMainnetContractAddress as `0x${string}`,
-  //     abi: NFTContractFactory,
-  //     functionName: "getNFTsWithMetadataCreatedByCreator",
-  //     args: [address],
-  //     onSuccess: (data) => {
-  //       console.log("Succes");
-  //     },
-  //     onError: (error) => {
-  //       console.log("Error", error);
-  //     },
-  //   });
+  const { data } = useReadContract({
+    address: contractAddress,
+    abi: launchPadABI,
+    functionName: "getNFTsWithMetadataCreatedByCreator",
+    args: [address],
+  });
 
-  //   const fetchData = async () => {
-  //     let nfts = [];
-  //     for (let nft of data as any) {
-  //       nfts.push(nft.nftAddress);
-  //       console.log(nft.nftAddress);
-  //     }
-  //     setNFTAddresses(nfts);
-  //   };
+  const fetchData = async () => {
+    let nfts = [];
+    for (let nft of data as any) {
+      nfts.push(nft.nftAddress);
+      console.log(nft.nftAddress);
+    }
+    setNFTAddresses(nfts);
+  };
 
-  //   useEffect(() => {
-  //     if (data) {
-  //       fetchData();
-  //     }
-  //   }, [data]);
+  useEffect(() => {
+    if (data) {
+      fetchData();
+    }
+  }, [data]);
 
   return (
     <Layout>

@@ -1,11 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useAccount } from "wagmi";
-// import ABI from "@/constants";
+import { useAccount, useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { launchPadNFTABI } from "@/constants";
+import { formatEther } from "viem";
+import toast from "react-hot-toast";
 
 interface TableProps {
   headers: string[];
-  NFTAddress: string;
+  NFTAddress: `0x${string}`;
 }
 
 const Table: React.FC<TableProps> = ({ headers, NFTAddress }) => {
@@ -15,71 +17,75 @@ const Table: React.FC<TableProps> = ({ headers, NFTAddress }) => {
   const [NFTBalanceInWei, setNFTBalanceInWei] = useState(BigInt(0));
   const { address } = useAccount();
 
-  //   const { data: uriData } = useContractRead({
-  //     address: NFTAddress as `0x${string}`,
-  //     abi: [""],
-  //     functionName: "uri",
-  //     args: [0],
-  //     onError: (error) => {
-  //       console.log("Error", error);
-  //     },
-  //   });
+  const { data: uriData } = useReadContract({
+    address: NFTAddress,
+    abi: launchPadNFTABI,
+    functionName: "uri",
+    args: [0],
+  });
 
-  //   const { data: contractBalance } = useContractRead({
-  //     address: NFTAddress as `0x${string}`,
-  //     abi: [""],
-  //     functionName: "getContractBalance",
-  //     onError: (error) => {
-  //       console.log("Error", error);
-  //     },
-  //   });
+  const { data: contractBalance } = useReadContract({
+    address: NFTAddress,
+    abi: launchPadNFTABI,
+    functionName: "getContractBalance",
+  });
 
-  //   const { data: contractMints } = useContractRead({
-  //     address: NFTAddress as `0x${string}`,
-  //     abi: [""],
-  //     functionName: "counter",
-  //     onError: (error) => {
-  //       console.log("Error", error);
-  //     },
-  //   });
+  const { data: contractMints } = useReadContract({
+    address: NFTAddress,
+    abi: launchPadNFTABI,
+    functionName: "counter",
+  });
 
-  //   const { config } = usePrepareContractWrite({
-  //     address: NFTAddress as `0x${string}`,
-  //     abi: [""],
-  //     functionName: "withdraw",
-  //     args: [NFTBalanceInWei, address],
-  //     onError: (error) => {
-  //       console.log("Error", error);
-  //     },
-  //   });
+  const { data, writeContractAsync, status, isError } = useWriteContract();
+  const {
+    isSuccess,
+    status: isValid,
+    isError: isTxError,
+  } = useWaitForTransactionReceipt({
+    hash: data,
+  });
 
-  //   const { writeAsync, error, isSuccess } = useContractWrite(config);
+  useEffect(() => {
+    if (status === "success" && isSuccess && isValid === "success") {
+      toast.success("Claimed Successfully", {
+        style: {
+          borderRadius: "10px",
+        },
+      });
+    } else if (isError && isTxError) {
+      toast.error("Something went wrong", {
+        style: {
+          borderRadius: "10px",
+        },
+      });
+    }
+  }, [status, isSuccess, isTxError, isError, isValid]);
 
-  //   useEffect(() => {
-  //     if (uriData) {
-  //       fetch(uriData as string)
-  //         .then((response) => response.json())
-  //         .then((data) => {
-  //           setNFTName(data.name);
-  //         });
-  //     }
-  //   }, [uriData]);
+  useEffect(() => {
+    if (uriData) {
+      fetch(uriData as string)
+        .then((response) => response.json())
+        .then((data) => {
+          setNFTName(data.name);
+        });
+    }
+  }, [uriData]);
 
-  //   useEffect(() => {
-  //     if (contractMints) {
-  //       setNFTTotalMints(contractMints.toString());
-  //     }
-  //   }, [contractMints]);
+  useEffect(() => {
+    if (contractMints) {
+      setNFTTotalMints(contractMints.toString());
+    }
+  }, [contractMints]);
 
-  //   useEffect(() => {
-  //     if (contractBalance) {
-  //       setNFTBalanceInWei(contractBalance as any);
-  //       setNFTBalance(utils.formatEther(contractBalance as any));
-  //     }
-  //   }, [contractBalance]);
+  useEffect(() => {
+    if (contractBalance) {
+      setNFTBalanceInWei(contractBalance as any);
+      setNFTBalance(formatEther(contractBalance as any));
+    }
+  }, [contractBalance]);
 
   return (
-    <tbody className="capitalize divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
+    <tbody className="capitalize divide-gray-200 dark:divide-gray-700 bg-sky-100 dark:bg-gray-900">
       <tr>
         <td className="px-4 py-4 text-sm font-medium whitespace-nowrap">
           <div className="font-medium text-gray-800 dark:text-white">{NFTName}</div>
@@ -96,8 +102,14 @@ const Table: React.FC<TableProps> = ({ headers, NFTAddress }) => {
           <div className="text-gray-700 dark:text-gray-200">
             <button
               className="bg-[#9FF3FF] hover:bg-[#94e2ee] text-gray-700 font-bold py-2 px-4 rounded-full drop-shadow-lg inline-flex items-center"
-              onClick={() => {
-                // writeAsync?.();
+              onClick={async () => {
+                await writeContractAsync({
+                  account: address,
+                  address: NFTAddress,
+                  abi: launchPadNFTABI,
+                  functionName: "withdraw",
+                  args: [NFTBalanceInWei, address],
+                });
               }}
             >
               Claim
