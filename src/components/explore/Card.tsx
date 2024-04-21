@@ -87,7 +87,7 @@ const Card = ({ name, price, image, nftAddress }: Campaigns) => {
         <p className="text-neutral-700 dark:text-cyan-200 font-normal">{price} ETH</p>
         <span className="flex flex-row gap-2 items-center">
           <Link
-            href={""}
+            href={`https://warpcast.com/~/compose?embeds[]=https://coincast-frame.vercel.app/frames?address=${nftAddress}`}
             target="_blank"
             className="p-2 bg-slate-100 hover:bg-slate-200 rounded-lg"
           >
