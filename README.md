@@ -10,6 +10,8 @@ Coincast is a uprising platform that allows creators to deploy and distribute ER
 
 By leveraging Farcaster's powerful distribution layer and its growing user base of over 50,000 daily active users (DAUs), Coincast provides creators with an unprecedented opportunity to reach and grow their audience across multiple blockchain networks.
 
+[Coincast Frame Repo](https://github.com/vrajdesai78/coincast-frame)
+
 ## Key Features
 
 - **NFT Deployment**: Coincast enables creators to easily deploy their own ERC1155 NFT collections, giving them full control over their digital assets.
