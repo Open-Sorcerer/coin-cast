@@ -31,7 +31,7 @@ const Product = ({ params }: { params: { address: `0x${string}` } }) => {
 
     const contractUri = await nftContract.read.uri([0]);
 
-    const price = await nftContract.read.price([0]);
+    const price = await nftContract.read.nftPrice([]);
 
     console.log("contractUri", contractUri);
 
