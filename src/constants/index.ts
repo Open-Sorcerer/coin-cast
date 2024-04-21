@@ -1,20 +1,23 @@
 const networks = [
   {
+    chain: "Sepolia",
+    logo: "/logos/eth.png",
+    contract: "0xccc8aFf496bCae6a05114dB4c27279d8b6D0942A",
+  },
+  {
     chain: "Arbitrum Sepolia",
     logo: "/logos/arbitrum.svg",
     contract: "0x6633589236aa3cc786c113a9b24d77cfb2ebf0b1",
   },
   {
-    chain: "Gnosis Chiado",
-    logo: "/logos/gnosis.png",
-  },
-  {
     chain: "Neon EVM DevNet",
     logo: "/logos/neon.png",
+    contract: "0x039A8561E235cF960bfed66AAD74441E3594aBb4",
   },
   {
     chain: "Morph Sepolia",
     logo: "/logos/morph.svg",
+    contract: "0xA4CCEb9e84b9682ca559AA41DB57f4BECe586dc5",
   },
   {
     chain: "Filecoin Calibration",
