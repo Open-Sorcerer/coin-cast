@@ -10,7 +10,7 @@ import { launchPadABI, networks } from "@/constants";
 
 let contractAddress: `0x${string}`;
 
-const NFTMembership = () => {
+const Launchpad = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
@@ -93,7 +93,7 @@ const NFTMembership = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col space-y-8 justify-center items-center max-w-[800px] mx-auto pb-32 pl-[60px] lg:pl-0">
+      <div className="flex flex-col space-y-8 justify-center items-center max-w-[800px] mx-auto pb-10 lg:pl-0">
         <div className="flex items-center w-[90%] md:w-full bg-gradient-to-r from-[#FFDC9A] to-[#FFBFAB] rounded-[30px] overflow-hidden shadow-lg">
           <div className="hidden md:flex mx-auto justify-center ml-5">
             <Image src="/images/nft.png" width="150" height="150" alt="Icon" />
@@ -219,4 +219,4 @@ const NFTMembership = () => {
   );
 };
 
-export default NFTMembership;
+export default Launchpad;

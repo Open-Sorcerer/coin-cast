@@ -3,6 +3,7 @@
 import { launchPadNFTABI, networks, type Campaigns } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { parseEther } from "viem";
@@ -12,6 +13,7 @@ let chainLogo = "";
 
 const Card = ({ name, price, image, nftAddress }: Campaigns) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
   const { address, chain } = useAccount();
   const { data, writeContract, status, isError } = useWriteContract();
   const { isSuccess, status: isValid } = useWaitForTransactionReceipt({
@@ -67,7 +69,7 @@ const Card = ({ name, price, image, nftAddress }: Campaigns) => {
         alt={name}
         width={300}
         height={300}
-        className="object-fill bg-cyan-400 w-[15rem] h-[15rem] bg-primary rounded-xl"
+        className="object-fill bg-cyan-400 w-[15rem] h-[15rem] rounded-xl"
       />
       <div className="flex flex-row mt-3 justify-between items-center">
         <h2 className="w-[85%] text-xl font-medium truncate">{name}</h2>
@@ -77,7 +79,7 @@ const Card = ({ name, price, image, nftAddress }: Campaigns) => {
             alt="chain"
             width={30}
             height={30}
-            className="object-fill bg-cyan-100 w-6 h-6 bg-primary rounded-full"
+            className="object-fill bg-cyan-100 w-6 h-6 rounded-full"
           />
         )}
       </div>
@@ -93,7 +95,7 @@ const Card = ({ name, price, image, nftAddress }: Campaigns) => {
           </Link>
           <button
             onClick={() => {
-              handleMint();
+              router.push(`${nftAddress}`);
             }}
             className="bg-gradient-to-br from-[#ffd84b] from-[20%] to-[#e6b366] hover:from-[#ffd643] hover:from-[20%] hover:to-[#d0a564] text-neutral-800 font-medium items-center rounded-lg px-5 py-1.5 disabled:opacity-70 disabled:cursor-progress"
             disabled={isLoading}
