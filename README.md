@@ -1,8 +1,9 @@
 # Coincast
 
+Empowering Creators with NFT Distribution via Farcaster Frames
+
 <img src="./coincast.png" alt="logo"  width="200" height="200"  />
 
-Empowering Creators with NFT Distribution via Farcaster Frames
 
 ## What is Coincast?
 
