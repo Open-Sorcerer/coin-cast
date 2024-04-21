@@ -24,8 +24,12 @@ const NFTMembership = () => {
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
   const { address, chain } = useAccount();
 
-  const { data, writeContract, status, error } = useWriteContract();
-  const { isSuccess, status: isValid } = useWaitForTransactionReceipt({
+  const { data, writeContract, status, isError } = useWriteContract();
+  const {
+    isSuccess,
+    status: isValid,
+    isError: isTxError,
+  } = useWaitForTransactionReceipt({
     hash: data,
   });
 
@@ -42,7 +46,7 @@ const NFTMembership = () => {
           borderRadius: "10px",
         },
       });
-    } else {
+    } else if (isError && isTxError) {
       setIsLoading(false);
       toast.error("Something went wrong", {
         style: {
@@ -50,7 +54,7 @@ const NFTMembership = () => {
         },
       });
     }
-  }, [status, isSuccess, isValid]);
+  }, [status, isSuccess, isTxError, isError, isValid]);
 
   const handleCreateMembership = async () => {
     setIsLoading(true);

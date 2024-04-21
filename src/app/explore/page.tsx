@@ -5,25 +5,25 @@ import { useEffect, useState } from "react";
 import { formatEther } from "viem";
 import { useAccount, useReadContract } from "wagmi";
 
-// let contractAddress: `0x${string}`;
-
 const Explore = () => {
   const [campaigns, setCampaigns] = useState<Campaigns[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [contractAddress, setContractAddress] = useState<`0x${string}`>();
   const { address, chain } = useAccount();
-  // useEffect(() => {
-  //   contractAddress = networks.find((network) => network.chain === chain?.name)
-  //     ?.contract as `0x${string}`;
-  // }, [chain?.name]);
+  useEffect(() => {
+    const contract = networks.find((network) => network.chain === chain?.name)
+      ?.contract as `0x${string}`;
+    setContractAddress(contract);
+  }, [chain?.name]);
 
   const { data, isFetched } = useReadContract({
-    address: "0x6633589236aa3cc786c113a9b24d77cfb2ebf0b1",
+    address: contractAddress,
     abi: launchPadABI,
     functionName: "getNFTsWithMetadataCreatedByCreator",
     args: [address],
   });
 
-  const fetchData = async () => {
+  const getCampaigns = async () => {
     let nfts = [];
     for (let nft of data as CampaignData[]) {
       const response = await fetch(nft.uri);
@@ -42,7 +42,7 @@ const Explore = () => {
 
   useEffect(() => {
     if (data && isFetched) {
-      fetchData();
+      getCampaigns();
     }
   }, [data]);
 

@@ -13,7 +13,7 @@ let chainLogo = "";
 const Card = ({ name, price, image, nftAddress }: Campaigns) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { address, chain } = useAccount();
-  const { data, writeContract, status, error } = useWriteContract();
+  const { data, writeContract, status, isError } = useWriteContract();
   const { isSuccess, status: isValid } = useWaitForTransactionReceipt({
     hash: data,
   });
@@ -50,7 +50,7 @@ const Card = ({ name, price, image, nftAddress }: Campaigns) => {
           borderRadius: "10px",
         },
       });
-    } else {
+    } else if (isError) {
       setIsLoading(false);
       toast.error("Something went wrong", {
         style: {
@@ -58,7 +58,7 @@ const Card = ({ name, price, image, nftAddress }: Campaigns) => {
         },
       });
     }
-  }, [status, isSuccess, error, isValid]);
+  }, [status, isSuccess, isError, isValid]);
 
   return (
     <div className="flex flex-col w-fit bg-[#141414] dark:bg-blue-700 bg-opacity-10 dark:bg-opacity-10 border border-neutral-300 dark:border-neutral-700 backdrop-filter backdrop-blur-sm rounded-xl shadow-md p-6">
